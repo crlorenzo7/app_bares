@@ -1,0 +1,29 @@
+{% extends "rango/index.html" %}
+
+{% block contenido %}
+
+{% if registrado %}
+
+
+{% else %}
+
+<form class="col-md-4 borde-cuadro" method="post" action="/rango/registrar/">
+{% csrf_token %}
+<h4>Registro</h4>
+<div class="linea-formulario">
+  <input name="username" id="username" class="form-control" type="text" placeholder="Username">
+</div>
+<div class="linea-formulario">
+  <input name="email" id="email" class="form-control" type="text" placeholder="Email">
+</div>
+<div class="linea-formulario">
+  <input name="pass1" id="pass1" class="form-control" type="password" placeholder="Password">
+</div>
+<div class="linea-formulario">
+  <input name="pass2" id="pass2" class="form-control" type="password" placeholder="Retype Password">
+</div>
+<button class="btn btn-info" >Registrar</button>
+</form>
+{% endif %}
+
+{% endblock %}

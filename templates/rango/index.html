@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="../../favicon.ico">
+        <title>Rango</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+         <link rel="stylesheet" href="{% static "css/style.css" %}">
+        <!-- Latest compiled and minified JavaScript -->
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+       
+        <title>Starter Template for Bootstrap</title>
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-default navbar-static-top" id="barra1">
+      <div class="container">
+        <div class="navbar-header">
+          
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/rango/">Gestion de Bares</a>
+         
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            {% if user.is_active %}
+            <a href="/rango/salir/"><button class="btn btn-info right-log" type="submit">salir</button></a>
+                <p class="texto-usuario-registrado"> {{ user.username }} </p>
+            {% else %}
+          <form class="navbar-form navbar-right" method="post" action="/rango/entrar/">
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <input name="username" id="username" class="form-control" type="text" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <input name="password" id="password" class="form-control" type="password" placeholder="Password">
+            </div>
+            
+            <button class="btn btn-success" type="submit">Entrar</button>
+            <a href="/rango/registrar/"><div class="btn btn-info" >Registrate</div></a>
+          </form>
+          {% endif %}
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/rango/">Bares</a></li>
+            <li><a href="/rango/about/">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+        
+      </div>
+    </nav>
+    <div class="cubierta-botones">
+            <div class="container" id="barra2">
+              <button type="button" class="btn btn-link boton-letra" id="b1">Letra grande</button>
+              <button type="button" class="btn btn-link boton-letra" id="b2">Letra mas grande</button>
+              <button type="button" class="btn btn-link boton-letra" id="b3">Letra normal</button>
+            </div>
+    </div>
+    <div class="container">
+
+      <div class="starter-template">
+          
+        {% block contenido %}
+        {% if bares %}
+            <div class="col-md-6">
+              <h4>Bares</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nombre Bar</th>
+                    <th>Direccion</th>
+                    <th>Numero Visitas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for bar in bares %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="bar/{{ bar.slug }}">{{ bar.nombre }}</a></td>
+                    <td>{{ bar.direccion }}</td>
+                    <td>{{ bar.numero_visitas }}</td>
+                  </tr>
+                    
+                    {% endfor %}
+                </tbody>
+              </table>
+            
+        
+        {% else %}
+            <strong>no hay bares en la lista</strong>
+        {% endif %}
+          </div>
+          <div class="col-md-6">
+              <div id="contenido">
+              
+              </div>
+          </div>
+        {% endblock %}
+      </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="{% static "js/java.js" %}"></script>
+   
+    </body>
+    
+</html>

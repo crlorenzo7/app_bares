@@ -1,0 +1,103 @@
+{% extends "rango/index.html" %}
+{% load easy_maps_tags cache%}
+{% block contenido %}
+    {% if bar %}
+            <header class="cabecera-bar">
+            <a href="/rango"><button type="button" class="btn btn-default return">Volver</button></a>
+            <h3>Bar {{ bar.nombre }}</h3>
+            
+            </header>
+            <section class="col-md-6">
+                <h4>Localizacion</h4>
+                {% easy_map  bar.direccion %}
+
+                
+            </section>
+            <section class="col-md-6">
+                <h4>Lista de Tapas</h4>
+                {% if tapas %}
+               
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Imagen</th>
+                        <th>Nombre Tapa</th>
+                        <th>Votos</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for tapa in tapas %}
+                      <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if tapa.imagen %}
+                            <img height="40px" width="40px" src="/media/{{ tapa.imagen }}" />
+                            {% else %}
+                           
+                            {% endif %}
+                        </td>
+                        <td>{{ tapa.nombre }}</td>
+                        <td class="votos">{{ tapa.votos }}</td>
+                        <td class="boton-gusto">
+                            {% if user.is_active %}
+                                {% if gustas %}
+                                    {% if tapa in gustas %}
+                                        <button class="btn btn-xs btn-danger no-me-gusta" data="{{ tapa.nombre }}" type="button">anular voto</button>
+                                    {% else %}
+                                        <button class="btn btn-xs btn-info me-gusta" data="{{ tapa.nombre }}" type="button">me gusta</button>
+                                    {% endif %}
+                                {% else %}
+                                    <button class="btn btn-xs btn-info me-gusta" data="{{ tapa.nombre }}" type="button">me gusta</button>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                      </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                
+                {% else %}
+                <strong>no hay tapas en la lista</strong>
+                {% endif %}
+                {% if user.is_active %}
+                <form class="borde-cuadro-2" id="formulario_tapas" method="post" enctype="multipart/form-data" action="/rango/add_tapa/">
+
+                    {% csrf_token %}
+                    <h4>Añadir Tapa</h4>
+                    <input id="nombre_bar" name="nombre_bar" type="hidden" value="{{ bar.nombre }}">
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    {% for field in form.visible_fields %}
+                        <div class="linea-formulario">
+                        {{ field.errors }}
+                        {{ field.help_text }}
+                        {{ field }}
+                        </div>
+                    {% endfor %}
+                    <div class="linea-formulario2">
+                      <span class="file-input btn btn-primary btn-file">
+                        Seleccionar Imagen <input name="imagen" id="imagen" type="file" multiple="">
+                      </span>
+                    </div>
+                    
+                    <button class="btn btn-info" type="submit">añadir tapa</button>
+                </form>
+                {% endif %}
+            </section>
+            
+            
+        {% else %}
+       
+            no existe el bar buscado
+        
+        {% endif %}
+        
+{% endblock %}
+
+
+
